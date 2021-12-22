@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<ToggleableShields.Icon.Toggle>Toggle shield belt</ToggleableShields.Icon.Toggle>
+	<ToggleableShields.Icon.Toggle.Desc>Toggle the shield belt. When off, ranged weapons may be used. When turned back on, there is a delay before it can begin to charge, the same delay as if the shield just broke.</ToggleableShields.Icon.Toggle.Desc>
+</LanguageData>
