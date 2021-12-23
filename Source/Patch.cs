@@ -52,7 +52,7 @@ namespace ToggleableShields
             foreach (var value in values) yield return value;
 
 			//Add our gizmo
-			if (!__instance.def.HasModExtension<StaticShield>())
+			if ((__instance.Wearer?.IsColonistPlayerControlled ?? false) && !__instance.def.HasModExtension<StaticShield>())
 			{
 				yield return new Command_Toggle
 					{
@@ -88,6 +88,35 @@ namespace ToggleableShields
 			static bool Prefix()
 			{
 				return false;
+			}
+		}
+
+		//This patches how pawns would normally ignore shield belts if they're using a gun when they go and equip things from storage
+		[HarmonyPatch(typeof(JobGiver_OptimizeApparel), nameof(JobGiver_OptimizeApparel.ApparelScoreGain))]
+		public class Patch_ApparelScoreGain
+		{
+			public static bool Prefix(Pawn pawn, Apparel ap, ref float __result)
+			{
+				if (ap is ShieldBelt && pawn.equipment.Primary != null && pawn.equipment.Primary.def.IsWeaponUsingProjectiles)
+				{
+					__result = JobGiver_OptimizeApparel.ApparelScoreRaw(pawn, ap);
+					return false;
+				}
+				return true;
+			}
+		}
+
+		//If a gun user equipa a shield belt while they're using a gun, the belt will default to off
+		[HarmonyPatch(typeof(Pawn_ApparelTracker), nameof(Pawn_ApparelTracker.Wear))]
+		public class Patch_Wear
+		{
+			public static void Prefix(Apparel newApparel, Pawn_ApparelTracker __instance)
+			{
+				ShieldBelt shieldBelt = newApparel as ShieldBelt;
+				if (shieldBelt != null && (__instance.pawn?.equipment?.Primary?.def.IsWeaponUsingProjectiles ?? false))
+				{
+					if (!shieldBelt.def.HasModExtension<StaticShield>()) shieldBelt.energy = -0.0001f;
+				}
 			}
 		}
     }
