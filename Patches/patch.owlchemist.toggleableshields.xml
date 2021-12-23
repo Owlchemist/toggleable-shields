@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationSequence">
+		<success>Always</success>
+		<operations>
+			<!-- If a shield is given this extension, it is blacklisted from this mod touching it -->
+			<li MayRequire="oskarpotocki.vfe.insectoid" Class="PatchOperationAddModExtension">
+				<xpath>Defs/ThingDef[defName="VFEI_Apparel_ArchotechShieldBelt"]</xpath>
+				<value>
+					<li Class="ToggleableShields.StaticShield" />
+				</value>
+			</li>
+		</operations>
+	</Operation>
+</Patch>

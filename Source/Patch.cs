@@ -52,22 +52,25 @@ namespace ToggleableShields
             foreach (var value in values) yield return value;
 
 			//Add our gizmo
-			yield return new Command_Toggle
-				{
-					defaultLabel = "ToggleableShields.Icon.Toggle".Translate(),
-					defaultDesc = "ToggleableShields.Icon.Toggle.Desc".Translate(),
-					icon = __instance.def.uiIcon ?? TexCommand.ForbidOff,
-					isActive = (() => __instance.energy >= 0f ),
-					toggleAction = delegate()
+			if (!__instance.def.HasModExtension<StaticShield>())
+			{
+				yield return new Command_Toggle
 					{
-						if (__instance.energy < 0) 
+						defaultLabel = "ToggleableShields.Icon.Toggle".Translate(),
+						defaultDesc = "ToggleableShields.Icon.Toggle.Desc".Translate(),
+						icon = __instance.def.uiIcon ?? TexCommand.ForbidOff,
+						isActive = (() => __instance.energy >= 0f ),
+						toggleAction = delegate()
 						{
-							__instance.energy = 0;
-							__instance.ticksToReset = __instance.StartingTicksToReset;
+							if (__instance.energy < 0f) 
+							{
+								__instance.energy = 0;
+								__instance.ticksToReset = __instance.StartingTicksToReset;
+							}
+							else __instance.energy = -0.0001f;
 						}
-						else __instance.energy = -0.0001f;
-					}
-				};
+					};
+			}
 		}
 
 		//Removes the shield warning as this mod largely makes it invalid
