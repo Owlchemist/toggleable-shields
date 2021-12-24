@@ -23,12 +23,7 @@ namespace ToggleableShields
 	{
 		public static bool Prefix(ShieldBelt __instance, ref bool __result)
 		{
-			if (__instance.energy >= 0f) return true;
-			else
-			{
-				__result = false;
-				return false;
-			}
+			return __result = __instance.energy >= 0f;
 		}
     }
 
@@ -113,9 +108,9 @@ namespace ToggleableShields
 			public static void Prefix(Apparel newApparel, Pawn_ApparelTracker __instance)
 			{
 				ShieldBelt shieldBelt = newApparel as ShieldBelt;
-				if (shieldBelt != null && (__instance.pawn?.equipment?.Primary?.def.IsWeaponUsingProjectiles ?? false))
+				if (shieldBelt != null && (__instance.pawn?.equipment?.Primary?.def.IsWeaponUsingProjectiles ?? false) && !shieldBelt.def.HasModExtension<StaticShield>())
 				{
-					if (!shieldBelt.def.HasModExtension<StaticShield>()) shieldBelt.energy = -0.0001f;
+					shieldBelt.energy = -0.0001f;
 				}
 			}
 		}
