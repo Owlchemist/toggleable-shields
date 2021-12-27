@@ -31,7 +31,7 @@ namespace ToggleableShields
 	[HarmonyPatch(typeof(ShieldBelt), nameof(ShieldBelt.EnergyGainPerTick), MethodType.Getter)]
 	public class Patch_EnergyGainPerTick
 	{
-		public static bool Prefix(ShieldBelt __instance, float __result)
+		public static bool Prefix(ShieldBelt __instance)
 		{
 			return __instance.energy >= 0f;
 		}
