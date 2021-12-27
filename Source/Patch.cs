@@ -114,5 +114,15 @@ namespace ToggleableShields
 				}
 			}
 		}
+
+		//Vanilla break code fails to do a null check on map. This fixes it. This rarely may happen if a pawn takes damage before entering the map and their shield value is 0
+		[HarmonyPatch(typeof(ShieldBelt), nameof(ShieldBelt.Break))]
+		public class Patch_Break
+		{
+			public static bool Prefix(ShieldBelt __instance)
+			{
+				return __instance?.Wearer?.Map != null;
+			}
+		}
     }
 }
