@@ -108,20 +108,16 @@ namespace ToggleableShields
 			public static void Prefix(Apparel newApparel, Pawn_ApparelTracker __instance)
 			{
 				ShieldBelt shieldBelt = newApparel as ShieldBelt;
-				if (shieldBelt != null && (__instance.pawn?.equipment?.Primary?.def.IsWeaponUsingProjectiles ?? false) && !shieldBelt.def.HasModExtension<StaticShield>())
+				if
+				(
+					shieldBelt != null && //Is a shield belt?
+					(__instance.pawn?.equipment?.Primary?.def.IsWeaponUsingProjectiles ?? false) && //Is using a gun?
+					!shieldBelt.def.HasModExtension<StaticShield>() && //Is not a static shield?
+					__instance.pawn.Spawned //Is the pawn actually spawned?
+				)
 				{
 					shieldBelt.energy = -0.0001f;
 				}
-			}
-		}
-
-		//Vanilla break code fails to do a null check on map. This fixes it. This rarely may happen if a pawn takes damage before entering the map and their shield value is 0
-		[HarmonyPatch(typeof(ShieldBelt), nameof(ShieldBelt.Break))]
-		public class Patch_Break
-		{
-			public static bool Prefix(ShieldBelt __instance)
-			{
-				return __instance?.Wearer?.Map != null;
 			}
 		}
     }
