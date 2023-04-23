@@ -67,6 +67,7 @@ namespace ToggleableShields
 			var shieldEnergy = shield.Energy;
 			var shieldEnergyMax = shield.parent.GetStatValue(StatDefOf.EnergyShieldEnergyMax, true, -1);
 			bool shieldOn = shieldEnergy >= 0f;
+			bool toggleable = !shield.parent.def.HasModExtension<StaticShield>();
 			
 			//Outer rect
 			Rect rect = new Rect(topLeft.x, topLeft.y, instance.GetWidth(maxWidth), 75f);
@@ -77,14 +78,22 @@ namespace ToggleableShields
 			Widgets.Label(new Rect(rectInner.x, rectInner.y, rectInner.width, rect.height / 2f), shield.IsApparel ? shield.parent.LabelCap : shieldInBuilt);
 
 			//Fill Bar
-			Rect rectFillableBar = new Rect(rectInner.x, rectInner.y + rectInner.height / 2f, rectInner.width - 28f, rectInner.height / 2f);
-			Widgets.FillableBar(rectFillableBar, shieldEnergy / System.Math.Max(1f, shieldEnergyMax), Gizmo_EnergyShieldStatus.FullShieldBarTex, Gizmo_EnergyShieldStatus.EmptyShieldBarTex, false);
-			
-			//Checkbox to right of fill bar
-			if (Widgets.ButtonImage(new Rect(rectFillableBar.xMax + 4f, rectFillableBar.y + 4f, 24f, 24f), shieldOn ? Widgets.CheckboxOnTex : Widgets.CheckboxOffTex, true))
+			Rect rectFillableBar;
+			if (toggleable)
 			{
-				ToggleShields(shieldOn, shield); //Moved into its own method for easier MP support
+				rectFillableBar = new Rect(rectInner.x, rectInner.y + rectInner.height / 2f, rectInner.width - 28f, rectInner.height / 2f);
+				
+				//Checkbox to right of fill bar
+				if (Widgets.ButtonImage(new Rect(rectFillableBar.xMax + 4f, rectFillableBar.y + 4f, 24f, 24f), shieldOn ? Widgets.CheckboxOnTex : Widgets.CheckboxOffTex, true))
+				{
+					ToggleShields(shieldOn, shield); //Moved into its own method for easier MP support
+				}
 			}
+			else
+			{
+				rectFillableBar = new Rect(rectInner.x, rectInner.y + rectInner.height / 2f, rectInner.width, rectInner.height / 2f);
+			}
+			Widgets.FillableBar(rectFillableBar, shieldEnergy / System.Math.Max(1f, shieldEnergyMax), Gizmo_EnergyShieldStatus.FullShieldBarTex, Gizmo_EnergyShieldStatus.EmptyShieldBarTex, false);
 
 			//Text over fill bar
 			Text.Font = GameFont.Small;
