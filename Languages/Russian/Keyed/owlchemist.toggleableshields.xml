@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <ToggleableShields.Icon.Toggle>Переключить пояс-щит</ToggleableShields.Icon.Toggle>
+  <ToggleableShields.Icon.Toggle.Desc>Переключить пояс-щит. В выключенном состоянии можно использовать дальнобойное оружие. При включении происходит задержка перед началом зарядки, такая же, как если бы щит только что сломался.</ToggleableShields.Icon.Toggle.Desc>
+
+</LanguageData>
