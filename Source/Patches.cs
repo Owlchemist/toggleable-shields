@@ -188,7 +188,8 @@ namespace ToggleableShields
 				newApparel.TryGetComp<CompShield>() is CompShield shieldBelt && //Is a shield belt?
 				(__instance.pawn?.equipment?.Primary?.def.IsWeaponUsingProjectiles ?? false) && //Is using a gun?
 				!shieldBelt.parent.def.HasModExtension<StaticShield>() && //Is not a static shield?
-				__instance.pawn.Spawned //Is the pawn actually spawned?
+				__instance.pawn.Spawned && //Is the pawn actually spawned?
+				shieldBelt.Props.blocksRangedWeapons //Is the shield actually blocking usage of guns?
 			)
 			{
 				shieldBelt.energy = -0.0001f;
